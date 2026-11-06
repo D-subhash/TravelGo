@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { destinations } from "../data/destinations";
-
+import { destinations } from "../data/Destinations";
 function Destinations() {
 
   const [search, setSearch] = useState("");
