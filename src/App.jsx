@@ -25,24 +25,30 @@ function App() {
   function logout() {
     localStorage.removeItem("travelgoCurrentUser");
     setUser(null);
-    navigate("/login");
+    navigate("/");
   }
 
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-success">
         <div className="container">
+
           <Link className="navbar-brand fw-bold" to="/">
             TravelGo
           </Link>
 
           <div className="navbar-nav ms-auto">
+
+            <Link className="nav-link" to="/">
+              Home
+            </Link>
+
+            <Link className="nav-link" to="/destinations">
+              Destinations
+            </Link>
+
             {user ? (
               <>
-                <Link className="nav-link" to="/destinations">
-                  Destinations
-                </Link>
-
                 <Link className="nav-link" to="/history">
                   Booking History
                 </Link>
@@ -60,29 +66,50 @@ function App() {
               </>
             ) : (
               <>
-                <Link className="nav-link" to="/signup">
-                  Sign Up
-                </Link>
-
                 <Link className="nav-link" to="/login">
                   Login
                 </Link>
+
+                <Link className="nav-link" to="/signup">
+                  Sign Up
+                </Link>
               </>
             )}
+
           </div>
         </div>
       </nav>
 
       <Routes>
-        <Route path="/" element={<Login onLogin={setUser} />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/"
+          element={<Destinations />}
+        />
+
         <Route
           path="/login"
           element={<Login onLogin={setUser} />}
         />
-        <Route path="/destinations" element={<Destinations />} />
-        <Route path="/booking/:id" element={<Booking />} />
-        <Route path="/history" element={<History />} />
+
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
+
+        <Route
+          path="/destinations"
+          element={<Destinations />}
+        />
+
+        <Route
+          path="/booking/:id"
+          element={<Booking />}
+        />
+
+        <Route
+          path="/history"
+          element={<History />}
+        />
       </Routes>
     </>
   );

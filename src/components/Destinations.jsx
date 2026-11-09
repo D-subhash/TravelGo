@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { destinations } from "../data/Destinations";
-function Destinations() {
 
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { destinations } from "../data/Destinations";
+
+function Destinations() {
   const [search, setSearch] = useState("");
   const [budget, setBudget] = useState("all");
 
-  const filteredDestinations = destinations.filter((place) => {
+  const navigate = useNavigate();
 
+  const filteredDestinations = destinations.filter((place) => {
     const matchesSearch =
       place.name.toLowerCase().includes(search.toLowerCase()) ||
       place.category.toLowerCase().includes(search.toLowerCase());
@@ -15,11 +17,26 @@ function Destinations() {
     const matchesBudget =
       budget === "all" ||
       (budget === "low" && place.price <= 6000) ||
-      (budget === "medium" && place.price > 6000 && place.price <= 8500) ||
+      (budget === "medium" &&
+        place.price > 6000 && place.price <= 8500) ||
       (budget === "high" && place.price > 8500);
 
     return matchesSearch && matchesBudget;
   });
+
+  // Book Now Function
+  function handleBookNow(placeId) {
+    const user = JSON.parse(
+      localStorage.getItem("travelgoCurrentUser") || "null"
+    );
+
+    if (user) {
+      navigate(`/booking/${placeId}`);
+    } else {
+      localStorage.setItem("pendingTravelBooking", placeId);
+      navigate("/login");
+    }
+  }
 
   return (
     <div className="container mt-5 mb-5">
@@ -71,7 +88,10 @@ function Destinations() {
                 src={place.image}
                 className="card-img-top"
                 alt={place.name}
-                style={{ height: "220px", objectFit: "cover" }}
+                style={{
+                  height: "220px",
+                  objectFit: "cover"
+                }}
               />
 
               <div className="card-body">
@@ -98,12 +118,12 @@ function Destinations() {
                   ₹{place.price} / Person
                 </h5>
 
-                <Link
-                  to={`/booking/${place.id}`}
+                <button
                   className="btn btn-success w-100 mt-2"
+                  onClick={() => handleBookNow(place.id)}
                 >
                   Book Now
-                </Link>
+                </button>
 
               </div>
             </div>
